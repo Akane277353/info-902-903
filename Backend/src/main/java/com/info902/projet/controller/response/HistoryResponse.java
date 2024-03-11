@@ -1,8 +1,5 @@
 package com.info902.projet.controller.response;
 
-import com.info902.projet.model.Assistant;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
