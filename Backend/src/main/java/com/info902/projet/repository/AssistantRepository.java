@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AssistantRepository extends CrudRepository<Assistant, Long> {
+public interface AssistantRepository extends CrudRepository<Assistant, Integer> {
 
     Optional<Assistant> findByCode(Integer code);
 }

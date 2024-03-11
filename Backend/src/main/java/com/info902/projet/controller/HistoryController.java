@@ -1,7 +1,6 @@
 package com.info902.projet.controller;
 
 import com.info902.projet.controller.request.NewHistoryRequest;
-import com.info902.projet.repository.HistoryRepository;
 import com.info902.projet.service.HistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
