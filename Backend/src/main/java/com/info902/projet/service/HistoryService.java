@@ -24,7 +24,11 @@ public class HistoryService {
     public void createHistory(NewHistoryRequest newHistoryRequest){
         Assistant assistant = assistantRepository.findByCode(newHistoryRequest.getCode()).orElseThrow();
         History newHistory = History.builder().request(newHistoryRequest.getRequest()).response(newHistoryRequest.getResponse()).date(new Date()).assistant(assistant).build();
+        assistant.getHistories().add(newHistory);
         historyRepository.save(newHistory);
+
+
+
     }
 
 }

@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -43,6 +45,6 @@ public class Assistant {
     private String wifiPassword;
 
     @OneToMany(mappedBy = "assistant")
-    private List<History> history;
+    private List<History> histories = new ArrayList<>();
 
 }

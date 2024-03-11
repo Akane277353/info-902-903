@@ -17,7 +17,7 @@ import java.util.Date;
 public class History {
 
     @ManyToOne
-    @JoinColumn(name = "code", nullable = false)
+    @JoinColumn(name = "assistant")
     private Assistant assistant;
     @Id
     @GeneratedValue

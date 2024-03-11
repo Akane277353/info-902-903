@@ -1,7 +1,11 @@
 package com.info902.projet.service;
 
+import com.info902.projet.controller.request.AssociateAssistantRequest;
 import com.info902.projet.controller.request.RegisterRequest;
+import com.info902.projet.controller.response.UserResponse;
+import com.info902.projet.model.Assistant;
 import com.info902.projet.model.User;
+import com.info902.projet.repository.AssistantRepository;
 import com.info902.projet.repository.UserRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +20,11 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AssistantRepository assistantRepository;
 
-    public User createUser(RegisterRequest registerRequest){
+
+    public UserResponse createUser(RegisterRequest registerRequest){
 
         Optional<User> user = userRepository.findByPseudo(registerRequest.getPseudo());
 
@@ -27,19 +34,34 @@ public class UserService {
                     .password(registerRequest.getPassword())
                     .build();
             userRepository.save(newUser);
-            return newUser;
+
+            UserResponse userResponse = new UserResponse(newUser.getId(), newUser.getPseudo());
+
+            return userResponse;
         } else {
             return null;
         }
 
     }
 
-    public User loginUser(RegisterRequest registerRequest){
+    public UserResponse loginUser(RegisterRequest registerRequest){
         Optional<User> user = userRepository.findByPseudoAndPassword(registerRequest.getPseudo(), registerRequest.getPassword());
         if (user.isPresent()) {
-            return user.get();
+            UserResponse userResponse = new UserResponse(user.get().getId(), user.get().getPseudo());
+            return userResponse;
         } else {
             return null;
         }
     }
+
+    public void associateAssistant(AssociateAssistantRequest associateAssistantRequest){
+        User user = userRepository.findById(associateAssistantRequest.getIdUser()).orElseThrow();
+        Assistant assistant = assistantRepository.findByCode(associateAssistantRequest.getCode()).orElseThrow();
+        assistant.setUser(user);
+        user.getAssistants().add(assistant);
+        userRepository.save(user);
+
+
+    }
+
 }
