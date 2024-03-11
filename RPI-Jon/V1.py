@@ -91,7 +91,7 @@ if __name__ == "__main__":
             recorder = Recorder(stream_params)
             recorder.record(5, "audio"+str(CPT)+".wav")
             CPT = CPT+1
-        """elif GPIO.input(6) == GPIO.LOW:
+            """elif GPIO.input(6) == GPIO.LOW:
             print("ON")
             print("You pressed r")
             stream_params = StreamParams()
