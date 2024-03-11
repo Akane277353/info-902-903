@@ -9,7 +9,7 @@ def random_string(length):
 
 
 def run_stt(text, save_location):
-    os.system("echo {} | /home/pi/piper/./piper --model fr-gilles-low.onnx --outpu_file {}".format(text, save_location))
+    os.system("echo {} | /home/pi/piper/./piper --model /home/pi/piper/fr-gilles-low.onnx --outpu_file {}".format(text, save_location))
  
 
 if __name__ == "__main__":
