@@ -1,7 +1,9 @@
 # pip install pvrecorder
+# pip install pyaudio
 
 
 import wave
+import pyaudio
 import struct
 import RPi.GPIO as GPIO
 
@@ -14,7 +16,7 @@ for index, device in enumerate(PvRecorder.get_available_devices()):
 
 CPT = 0
 
-Channel = 0
+Channel = 1
 Rate = 16000
 Format = pyaudio.paInt16
 
@@ -51,4 +53,6 @@ while True:
             CPT = CPT+1
             print("END")
             recorder.delete()
+            recorder = None
+            audio = []
             INIT = False
