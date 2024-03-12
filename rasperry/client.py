@@ -1,6 +1,9 @@
 import requests
 import json
 import argparse
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 def get_txt(data):
@@ -23,7 +26,7 @@ def ping(c):
 def stt(address, audio, mode="/stt"): # mode heavystt
     url = address+mode
     files = {'audio_file': open(audio, 'rb')}
-    r = requests.post(url, files=files)
+    r = requests.post(url, files=files, verify=False)
     return r.text
 
 
@@ -36,7 +39,7 @@ def tts(address, text, speaker, lang, mode="/tts"): # mode heavytts
 
     json_data = json.dumps(data)
     headers = {'Content-Type': 'application/json'}
-    r = requests.post(address+mode, data=json_data, headers=headers)
+    r = requests.post(address+mode, data=json_data, headers=headers, verify=False)
     if r.status_code == 200:
         with open("a.wav", 'wb') as file:
             file.write(r.content) != 200
@@ -50,7 +53,7 @@ def ollama(model="mistral", text="hello"):
         "prompt": text
     }
 
-    response = requests.post('http://localhost:11434/api/generate', json=json_data)
+    response = requests.post('https://localhost:11434/api/generate', json=json_data, verify=False)
     res = response.text
     print(type(res))
     res = res.split("\n")
@@ -67,14 +70,14 @@ def ollama(model="mistral", text="hello"):
 def testlocal(address, audio, mode):
     url = address+mode
     files = {'audio_file': open(audio, 'rb')}
-    r = requests.post(url, files=files)
+    r = requests.post(url, files=files, verify=False)
     return r.text
 
 
 def testheavy(address, audio, mode):
     url = address+mode
     files = {'audio_file': open(audio, 'rb')}
-    r = requests.post(url, files=files)
+    r = requests.post(url, files=files, verify=False)
     if r.status_code == 200:
         with open("a.wav", 'wb') as file:
             file.write(r.content) != 200
@@ -86,12 +89,16 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
 
-    #print(stt("http://localhost:8080", "output.wav"))
-    #print(stt("http://localhost:8080", "output.wav", mode="/heavystt"))
-    #tts("http://localhost:8080", "bonjour, je me nomme gustave. et vous?", "output.wav","fr", mode="/heavytts")
+    #print(stt("https://localhost:8080", "output.wav"))
+    #print(stt("https://localhost:8080", "output.wav", mode="/heavystt"))
+    #tts("https://localhost:8080", "bonjour, je me nomme gustave. et vous?", "output.wav","fr", mode="/heavytts")
 
+    r = requests.post("https://localhost:8080/hello", '{}', verify=False)
+
+    print(r.text)
     #print(testlocal("http://localhost:8080", "output.wav", "/localrequest"))
     if args.mode == "local":
-        print(testlocal("http://localhost:8080", "output.wav", "/localrequest"))
+        print(testlocal("https://localhost:8080", "output.wav", "/localrequest"))
     else:
-        print(testheavy("http://localhost:8080", "output.wav", "/heavyrequest"))
+        print(testheavy("https://localhost:8080", "output.wav", "/heavyrequest"))
+    

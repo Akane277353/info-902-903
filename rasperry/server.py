@@ -1,4 +1,4 @@
-from bottle import run, post, request, response, get, route, static_file, Bottle
+from bottle import run, post, request, response, get, route, static_file, Bottle, ServerAdapter
 import random
 import string
 import json
@@ -110,32 +110,39 @@ def init_globals():
 ###############################################################
 
 
+app = Bottle()
+
 
 ################         TEST ROUTE         ###################
 
 
 
-@route('/hello', method = 'POST')
+@app.route('/hello', method = 'POST')
 def return_audio():
     return "hello!"
 
 
-@route('/audio', method = 'POST')
+@app.route('/helloworld', method = 'GET')
+def hello():
+    return "hello!"
+
+
+@app.route('/audio', method = 'POST')
 def return_audio():
     return static_file("output.wav", root='.')
 
 
-@route('/stt', method = 'POST')
+@app.route('/stt', method = 'POST')
 def light_stt_req():
     return light_stt(request)
 
 
-@route('/heavystt', method = 'POST')
+@app.route('/heavystt', method = 'POST')
 def heavy_stt_req():
     return heavy_stt(request)
 
 
-@route('/tts', method = 'POST')
+@app.route('/tts', method = 'POST')
 def light_tts_req():
     global mode
     try:
@@ -156,7 +163,7 @@ def light_tts_req():
         return f"Error: {str(e)}"
     
 
-@route('/heavytts', method = 'POST')
+@app.route('/heavytts', method = 'POST')
 def heavy_tts_req():
     global mode
     if mode == "server":
@@ -187,7 +194,7 @@ def heavy_tts_req():
 
 
 
-@route('/localrequest', method = 'POST')
+@app.route('/localrequest', method = 'POST')
 def local_req():
     try:
         print(f"{Fore.GREEN}Starting Local Request...{Style.RESET_ALL}")
@@ -200,7 +207,7 @@ def local_req():
         return f"Error: {str(e)}"
     
 
-@route('/heavyrequest', method = 'POST')
+@app.route('/heavyrequest', method = 'POST')
 def distant_req():
     try:
         print(f"{Fore.GREEN}Starting Distant Request...{Style.RESET_ALL}")
@@ -224,6 +231,21 @@ def distant_req():
 
 
 
+class SSLCherootAdapter(ServerAdapter):
+    def run(self, handler):
+        from cheroot import wsgi
+        from cheroot.ssl.builtin import BuiltinSSLAdapter
+        import ssl
+
+        server = wsgi.Server((self.host, self.port), handler)
+        server.ssl_adapter = BuiltinSSLAdapter("cacert.pem", "privkey.pem")
+
+        try:
+            server.start()
+        finally:
+            server.stop()
+
+
 
 if __name__ == '__main__':
     colorama_init()
@@ -237,4 +259,11 @@ if __name__ == '__main__':
     mode = args.mode
 
     init_globals()
-    run(host='localhost', port=args.port, debug=True, server_max_request_body_size=MAX_REQUEST_BODY_SIZE)
+    run(
+        app, 
+        host='localhost', 
+        port=args.port,
+        server_max_request_body_size=MAX_REQUEST_BODY_SIZE,
+        debug=1,
+        server=SSLCherootAdapter
+    )
