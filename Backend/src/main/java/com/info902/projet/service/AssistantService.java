@@ -8,6 +8,7 @@ import com.info902.projet.model.History;
 import com.info902.projet.model.User;
 import com.info902.projet.repository.AssistantRepository;
 import com.info902.projet.repository.HistoryRepository;
+import com.info902.projet.repository.UserRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class AssistantService {
 
     @Autowired
     private HistoryRepository historyRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public Integer createAssistant(){
         Assistant newAssistant = Assistant.builder().language("fr").voice("basic").wifiPassword("").wifiSSID("").build();
@@ -61,6 +65,16 @@ public class AssistantService {
 
         AssistantResponse assistantResponse = new AssistantResponse(assistant.getCode(), assistant.getLanguage(), assistant.getVoice(), assistant.getWifiSSID(), assistant.getWifiPassword(), historyResponseList);
         return assistantResponse;
+    }
+
+    public List<AssistantResponse> getAssistantOfUser(Long id){
+        var user = userRepository.findById(id).orElseThrow();
+        var assistants = user.getAssistants();
+        var listAssistant = new ArrayList<AssistantResponse>();
+        for(int i = 0; i<assistants.size(); i++){
+            listAssistant.add(getAssistant(assistants.get(i).getCode()));
+        }
+        return listAssistant;
     }
 
 }

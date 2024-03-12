@@ -6,6 +6,7 @@ import com.info902.projet.model.Assistant;
 import com.info902.projet.model.History;
 import com.info902.projet.service.AssistantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,22 +19,28 @@ public class AssistantController {
     @Autowired
     private AssistantService assistantService;
     @GetMapping("/login")
-    public Integer AssistantLogin(){
-        return assistantService.createAssistant();
+    public ResponseEntity<Integer> AssistantLogin(){
+        return ResponseEntity.ok(assistantService.createAssistant());
     }
 
     @GetMapping("/config/{code}")
-    public ConfigResponse AssistantConfig(@PathVariable Integer code){
-        return assistantService.getConfig(code);
+    public ResponseEntity<ConfigResponse> AssistantConfig(@PathVariable Integer code){
+        return ResponseEntity.ok(assistantService.getConfig(code));
     }
 
     @GetMapping("isvalid/{code}")
-    public Boolean IsAssistantConfig(@PathVariable Integer code){
-        return assistantService.isAssistantValid(code);
+    public ResponseEntity<Boolean> IsAssistantConfig(@PathVariable Integer code){
+        return ResponseEntity.ok(assistantService.isAssistantValid(code));
     }
 
     @GetMapping("{code}")
-    public AssistantResponse GetAssistant(@PathVariable Integer code){
-        return assistantService.getAssistant(code);
+    public ResponseEntity<AssistantResponse> GetAssistant(@PathVariable Integer code){
+        return ResponseEntity.ok(assistantService.getAssistant(code));
     }
+
+    @GetMapping("/assistantsofuser/{id}")
+    public ResponseEntity<List<AssistantResponse>> GetAssistantsOfUser(@PathVariable Long id){
+        return ResponseEntity.ok(assistantService.getAssistantOfUser(id));
+    }
+
 }

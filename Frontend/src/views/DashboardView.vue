@@ -1,9 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AssistantListComponent from '@/components/panel-left/AssistantListComponent.vue'
+</script>
 
 <template>
   <div class="dashboard">
-    <h2>Dashboard</h2>
+    <AssistantListComponent />
+    <div></div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.dashboard {
+  display: flex;
+}
+</style>

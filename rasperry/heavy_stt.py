@@ -1,10 +1,13 @@
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
-from datasets import load_dataset
 import argparse
+from colorama import init as colorama_init
+from colorama import Fore
+from colorama import Style
 
 
 def init_heavy_stt():
+    print(f"{Fore.GREEN}initiating heavy STT model...{Style.RESET_ALL}")
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
@@ -34,11 +37,15 @@ def init_heavy_stt():
 
 
 def run_heavy_stt(pipe, audio):
-    sample = open(audio, "rb").read()
-    return pipe(sample)["text"]
+    with open(audio, "rb") as f:
+        sample = f.read()
+        return pipe(sample)["text"]
+    
+    return "Error while treating the audio file"
 
 
 if __name__ == "__main__":
+    colorama_init()
     parser = argparse.ArgumentParser()
     parser.add_argument("--audio_file", default="output.wav", type=str, help="The audio file to be converted to text")
     args = parser.parse_args()

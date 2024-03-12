@@ -1,6 +1,4 @@
 export interface User {
-  id: string
+  id: number
   pseudo: string
-  password: string
-  assistants: string[]
 }
