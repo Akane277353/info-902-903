@@ -1,5 +1,3 @@
-import subprocess
-import wave
 from bottle import run, post, request, response, get, route, static_file, Bottle
 import random
 import string
@@ -8,9 +6,6 @@ from heavy_tts import *
 from stt import *
 from heavy_stt import *
 from tts import *
-from colorama import init as colorama_init
-from colorama import Fore
-from colorama import Style
 import argparse
 
 MAX_REQUEST_BODY_SIZE = 200 * 1024 * 1024
@@ -18,6 +13,15 @@ _stt = None
 _heavy_tts = None
 _heavy_stt = None
 _mode = None
+
+
+
+
+###############################################################
+##################         UTILITY         ####################
+###############################################################
+
+
 
 
 def ollama(model="tinyllama", text="hello"):
@@ -43,7 +47,6 @@ def ollama(model="tinyllama", text="hello"):
 def light_tts(text, speaker, lang):
     global _tts
     name = random_string(10) + ".wav"
-    print(name)
     run_tts(text, speaker, name)
     return name
 
@@ -51,7 +54,6 @@ def light_tts(text, speaker, lang):
 def light_stt(request):
     global _stt
     name = random_string(10) + ".wav"
-    print(name)
     audio = request.files.get('audio_file')
     if audio:
         audio.save(name, overwrite=True)
@@ -92,16 +94,24 @@ def init_globals():
     global _heavy_stt
     global mode
     
-    print("Initializing TTS and STT")
     if mode == "local":
         _stt = init_stt()
     else:
         _stt = init_stt()
         _heavy_tts = init_heavy_tts()
         _heavy_stt = init_heavy_stt()
-    print("{Fore.GREEN}TTS and STT initialized{Style.RESET_ALL}")
+    print("TTS and STT initialize")
 
 
+
+
+###############################################################
+##################         ROUTE         ######################
+###############################################################
+
+
+
+################         TEST ROUTE         ###################
 
 
 
@@ -144,7 +154,7 @@ def light_tts_req():
     except Exception as e:
         response.status = 500 
         return f"Error: {str(e)}"
-
+    
 
 @route('/heavytts', method = 'POST')
 def heavy_tts_req():
@@ -172,9 +182,15 @@ def heavy_tts_req():
         return "can't run this request in local mode"
     
 
+
+################         MAIN ROUTE         ###################
+
+
+
 @route('/localrequest', method = 'POST')
 def local_req():
     try:
+        print(f"{Fore.GREEN}Starting Local Request...{Style.RESET_ALL}")
         data = light_stt(request)
         llm = ollama(model="tinyllama", text=data)
         return llm
@@ -187,9 +203,10 @@ def local_req():
 @route('/heavyrequest', method = 'POST')
 def distant_req():
     try:
+        print(f"{Fore.GREEN}Starting Distant Request...{Style.RESET_ALL}")
         data = heavy_stt(request)
         print(data)
-        llm = ollama(model="tinyllama", text=data)
+        llm = ollama(model="mistral", text=data)
         print(llm)
         name = heavy_tts(llm, "output.wav", "fr")
         return static_file(name, root='.')
@@ -199,7 +216,17 @@ def distant_req():
         return f"Error: {str(e)}"
 
 
+
+
+###############################################################
+###################         MAIN         ######################
+###############################################################
+
+
+
+
 if __name__ == '__main__':
+    colorama_init()
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", default="local", type=str, help="server or local")
     args = parser.parse_args()
@@ -207,6 +234,5 @@ if __name__ == '__main__':
     global mode
     mode = args.mode
 
-    colorama_init()
     init_globals()
     run(host='localhost', port=8080, debug=True, server_max_request_body_size=MAX_REQUEST_BODY_SIZE)

@@ -1,9 +1,13 @@
 import torch
 from TTS.api import TTS
 import argparse
+from colorama import init as colorama_init
+from colorama import Fore
+from colorama import Style
 
 
 def init_heavy_tts(model="tts_models/multilingual/multi-dataset/xtts_v2"):
+    print(f"{Fore.GREEN}initiating heavy TTS model...{Style.RESET_ALL}")
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(TTS().list_models())
     tts = TTS(model).to(device)
@@ -15,6 +19,7 @@ def run_heavy_tts(tts, text, speaker_wav, file_path="result.wav", language="en")
 
 
 if __name__ == "__main__":
+    colorama_init()
     parser = argparse.ArgumentParser()
     parser.add_argument("--text", type=str, help="The text to be converted to speech")
     parser.add_argument("--speaker_wav", default="output.wav", type=str, help="The speaker's voice to be used")

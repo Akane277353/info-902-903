@@ -3,10 +3,14 @@ import wave
 import sys
 import argparse
 from vosk import Model, KaldiRecognizer, SetLogLevel
+from colorama import init as colorama_init
+from colorama import Fore
+from colorama import Style
 
 
 def init_stt(lang="fr"):
     SetLogLevel(0)
+    print(f"{Fore.GREEN}initiating light STT model...{Style.RESET_ALL}")
     model = Model(lang=lang)
     return model
 
@@ -32,6 +36,7 @@ def run_stt(model, audio_file):
 
 
 if __name__ == "__main__":
+    colorama_init()
     parser = argparse.ArgumentParser()
     parser.add_argument("--audio_file", type=str, help="The audio file to be converted to text")
     parser.add_argument("--lang", type=str, help="The language of the audio file")

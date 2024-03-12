@@ -75,7 +75,9 @@ def testheavy(address, audio, mode):
     url = address+mode
     files = {'audio_file': open(audio, 'rb')}
     r = requests.post(url, files=files)
-    return r.text
+    if r.status_code == 200:
+        with open("a.wav", 'wb') as file:
+            file.write(r.content) != 200
 
 
 if __name__ == "__main__":
@@ -89,4 +91,7 @@ if __name__ == "__main__":
     #tts("http://localhost:8080", "bonjour, je me nomme gustave. et vous?", "output.wav","fr", mode="/heavytts")
 
     #print(testlocal("http://localhost:8080", "output.wav", "/localrequest"))
-    print(testheavy("http://localhost:8080", "output.wav", "/heavyrequest"))
+    if args.mode == "local":
+        print(testlocal("http://localhost:8080", "output.wav", "/localrequest"))
+    else:
+        print(testheavy("http://localhost:8080", "output.wav", "/heavyrequest"))
