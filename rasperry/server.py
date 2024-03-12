@@ -207,7 +207,7 @@ def local_req():
         return f"Error: {str(e)}"
     
 
-@app.route('/heavyrequest', method = 'POST')
+@app.route('/distantrequest', method = 'POST')
 def distant_req():
     try:
         print(f"{Fore.GREEN}Starting Distant Request...{Style.RESET_ALL}")
@@ -223,10 +223,10 @@ def distant_req():
         return f"Error: {str(e)}"
     
 
-@app.route('/heavynottsrequest', method = 'POST')
-def distant_req():
+@app.route('/distantnottsrequest', method = 'POST')
+def distant_no_tts_req():
     try:
-        print(f"{Fore.GREEN}Starting Distant Request...{Style.RESET_ALL}")
+        print(f"{Fore.GREEN}Starting Distant No TTS Request...{Style.RESET_ALL}")
         data = heavy_stt(request)
         print(data)
         llm = ollama(model="mistral", text=data)

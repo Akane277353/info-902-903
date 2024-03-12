@@ -114,8 +114,8 @@ if __name__ == "__main__":
         print(local_mode(args.address+":"+args.port, args.audio, "/localrequest"))
     elif args.mode == "hltts":
         print(f"{Fore.GREEN}Sending distant request no tts...{Style.RESET_ALL}")
-        print(heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/heavynottsrequest"))
+        print(heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/distantnottsrequest"))
     else:
         print(f"{Fore.GREEN}Sending distant request...{Style.RESET_ALL}")
-        heavy_mode(args.address+":"+args.port, args.audio, "/heavyrequest")
+        heavy_mode(args.address+":"+args.port, args.audio, "/distantrequest")
     
