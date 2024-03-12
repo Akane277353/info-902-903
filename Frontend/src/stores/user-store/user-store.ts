@@ -6,7 +6,7 @@ import type { User } from './models/User'
 import { UserService } from './service/user.service'
 
 interface State {
-  user: User | null
+  user: User
   isLoading: boolean
   assistants: Assistant[]
   histories: Histories[]
@@ -16,7 +16,7 @@ interface State {
 
 export const useUserStore = defineStore('useUserStore', {
   state: (): State => ({
-    user: null,
+    user: { id: 0, pseudo: '' },
     isLoading: false,
     assistants: [],
     histories: [],
@@ -65,6 +65,7 @@ export const useUserStore = defineStore('useUserStore', {
       console.log('history', index)
       this.histories = this.assistants[index].histories
       this.isHistories = true
+      this.selectedAssistant = index
     },
 
     setSettings(index: number) {
@@ -94,7 +95,7 @@ export const useUserStore = defineStore('useUserStore', {
         wifiSSID,
         wifiPassword
       )
-      this.fetchAssistants(this.user?.id)
+      this.fetchAssistants(this.user.id)
       this.isLoading = false
     }
   }
