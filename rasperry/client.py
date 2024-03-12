@@ -67,14 +67,22 @@ def ollama(model="mistral", text="hello"):
     return result
 
 
-def testlocal(address, audio, mode):
+def local_mode(address, audio, mode):
     url = address+mode
     files = {'audio_file': open(audio, 'rb')}
     r = requests.post(url, files=files, verify=False)
     return r.text
 
 
-def testheavy(address, audio, mode):
+def heavy_mode(address, audio, mode):
+    url = address+mode
+    files = {'audio_file': open(audio, 'rb')}
+    r = requests.post(url, files=files, verify=False)
+    if r.status_code == 200:
+        with open("a.wav", 'wb') as file:
+            file.write(r.content) != 200
+
+def heavy_mode_l_tts(address, audio, mode):
     url = address+mode
     files = {'audio_file': open(audio, 'rb')}
     r = requests.post(url, files=files, verify=False)
@@ -86,6 +94,8 @@ def testheavy(address, audio, mode):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", default="local", type=str, help="server or local")
+    parser.add_argument("--address", default="https://localhost:8080", type=str, help="server address")
+    parser.add_argument("--audio", default="output.wav", type=str, help="audio file")
     args = parser.parse_args()
 
 
@@ -93,12 +103,15 @@ if __name__ == "__main__":
     #print(stt("https://localhost:8080", "output.wav", mode="/heavystt"))
     #tts("https://localhost:8080", "bonjour, je me nomme gustave. et vous?", "output.wav","fr", mode="/heavytts")
 
-    r = requests.post("https://localhost:8080/hello", '{}', verify=False)
+    r = requests.post("https://141.145.207.6:8080/hello", '{}', verify=False)
 
     print(r.text)
-    #print(testlocal("http://localhost:8080", "output.wav", "/localrequest"))
     if args.mode == "local":
-        print(testlocal("https://localhost:8080", "output.wav", "/localrequest"))
+        print("sending local request")
+        print(local_mode("https://141.145.207.6:8080", args.audio, "/localrequest"))
+    elif args.mode == "hltts":
+        print("sending heavy no tts request")
+        print(heavy_mode_l_tts("https://141.145.207.6:8080", args.audio, "/heavynottsrequest"))
     else:
-        print(testheavy("https://localhost:8080", "output.wav", "/heavyrequest"))
+        heavy_mode("https://141.145.207.6:8080", args.audio, "/heavyrequest")
     

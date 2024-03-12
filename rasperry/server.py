@@ -221,6 +221,20 @@ def distant_req():
     except Exception as e:
         response.status = 500 
         return f"Error: {str(e)}"
+    
+
+@app.route('/heavynottsrequest', method = 'POST')
+def distant_req():
+    try:
+        print(f"{Fore.GREEN}Starting Distant Request...{Style.RESET_ALL}")
+        data = heavy_stt(request)
+        print(data)
+        llm = ollama(model="mistral", text=data)
+        return llm
+
+    except Exception as e:
+        response.status = 500 
+        return f"Error: {str(e)}"
 
 
 
