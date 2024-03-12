@@ -261,7 +261,7 @@ if __name__ == '__main__':
     init_globals()
     run(
         app, 
-        host='localhost', 
+        host='0.0.0.0', 
         port=args.port,
         server_max_request_body_size=MAX_REQUEST_BODY_SIZE,
         debug=1,
