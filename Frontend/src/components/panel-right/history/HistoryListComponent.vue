@@ -7,16 +7,32 @@ const userStore = useUserStore()
 <template>
   <div class="history">
     <div class="histo" v-for="(history, index) in userStore.getHistory" :key="index">
-      <p>{{ history.request }}</p>
-      <p>{{ history.response }}</p>
+      <p class="request">{{ history.request }}</p>
+      <p class="response">{{ history.response }}</p>
     </div>
   </div>
 </template>
 
 <style scoped>
 .history {
-  background-color: beige;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.histo {
+  display: flex;
+  flex-direction: column;
+}
+
+.request {
+  margin-right: 10px;
+  margin-left: auto;
+}
+
+.response {
+  margin-left: 10px;
+  margin-right: auto;
 }
 </style>

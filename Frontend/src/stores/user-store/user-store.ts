@@ -10,6 +10,8 @@ interface State {
   isLoading: boolean
   assistants: Assistant[]
   histories: Histories[]
+  isHistories: boolean
+  selectedAssistant: number
 }
 
 export const useUserStore = defineStore('useUserStore', {
@@ -17,13 +19,17 @@ export const useUserStore = defineStore('useUserStore', {
     user: null,
     isLoading: false,
     assistants: [],
-    histories: []
+    histories: [],
+    isHistories: true,
+    selectedAssistant: 0
   }),
   getters: {
     getUser: (state) => state.user,
     getIsLoading: (state) => state.isLoading,
     getAssistants: (state) => state.assistants,
-    getHistory: (state) => state.histories
+    getHistory: (state) => state.histories,
+    getIsHistories: (state) => state.isHistories,
+    getSelectedAssistant: (state) => state.selectedAssistant
   },
   actions: {
     async register(pseudo: string, password: string) {
@@ -56,7 +62,15 @@ export const useUserStore = defineStore('useUserStore', {
     },
 
     setHistory(index: number) {
+      console.log('history', index)
       this.histories = this.assistants[index].histories
+      this.isHistories = true
+    },
+
+    setSettings(index: number) {
+      console.log('settings', index)
+      this.isHistories = false
+      this.selectedAssistant = index
     }
   }
 })
