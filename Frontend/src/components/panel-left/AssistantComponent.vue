@@ -3,13 +3,17 @@ import settings from '../../assets/settings.png'
 const props = defineProps({
   code: { type: Number, required: true }
 })
+
+const emit = defineEmits(['clickSettings', 'clickAssist'])
 </script>
 
 <template>
   <div>
     <v-card class="d-flex" height="200" width="300">
-      <h1>{{ props.code }}</h1>
-      <img width="30" height="30" :src="settings" alt="settings" />
+      <v-card-actions @click="emit('clickAssist')">
+        <h1>{{ props.code }}</h1>
+      </v-card-actions>
+      <img width="30" height="30" :src="settings" alt="settings" @click="emit('clickSettings')" />
     </v-card>
   </div>
 </template>

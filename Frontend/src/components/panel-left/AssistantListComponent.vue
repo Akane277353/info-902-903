@@ -8,6 +8,10 @@ const userStore = useUserStore()
 function setHistory(index: number) {
   userStore.setHistory(index)
 }
+
+function setSettings(index: number) {
+  userStore.setSettings(index)
+}
 </script>
 
 <template>
@@ -17,7 +21,8 @@ function setHistory(index: number) {
       v-for="(assistant, index) of userStore.getAssistants"
       :key="index"
       :code="assistant.code"
-      @click="setHistory(index)"
+      @click-assist="setHistory(index)"
+      @click-settings="setSettings(index)"
     />
   </div>
 </template>

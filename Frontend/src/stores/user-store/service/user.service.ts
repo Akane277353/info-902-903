@@ -37,4 +37,37 @@ export class UserService {
       return Promise.reject(e)
     }
   }
+
+  static async addAssistant(id: number, code: number) {
+    const params = {
+      idUser: id,
+      code: code
+    }
+    try {
+      const response = await instance.post<void>('/user/associate', params)
+    } catch (e) {
+      return Promise.reject(e)
+    }
+  }
+
+  static async setAssistantConfiguration(
+    code: number,
+    language: string,
+    voice: string,
+    wifiSSID: string,
+    wifiPassword: string
+  ) {
+    const params = {
+      code: code,
+      language: language,
+      voice: voice,
+      wifiSSID: wifiSSID,
+      wifiPassword: wifiPassword
+    }
+    try {
+      await instance.post<void>('/assistant/setconfig', params)
+    } catch (e) {
+      return Promise.reject(e)
+    }
+  }
 }
