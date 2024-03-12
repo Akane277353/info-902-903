@@ -85,6 +85,7 @@ def heavy_mode(address, audio, mode):
         with open("a.wav", 'wb') as file:
             file.write(r.content) != 200
 
+
 def heavy_mode_l_tts(address, audio, mode):
     url = address+mode
     files = {'audio_file': open(audio, 'rb')}
@@ -111,10 +112,12 @@ if __name__ == "__main__":
     print(r.text)
     if args.mode == "local":
         print(f"{Fore.GREEN}Sending local request...{Style.RESET_ALL}")
-        print(local_mode(args.address+":"+args.port, args.audio, "/localrequest"))
+        res = local_mode(args.address+":"+args.port, args.audio, "/localrequest")
+        tts(args.address+":"+args.port, res, "/home/pi/piper/fr-gilles-low.onnx","fr")
     elif args.mode == "hntts":
         print(f"{Fore.GREEN}Sending distant request no tts...{Style.RESET_ALL}")
-        print(heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/distantnottsrequest"))
+        res = heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/distantnottsrequest")
+        tts(args.address+":"+args.port, res, "/home/pi/piper/fr-gilles-low.onnx","fr")
     elif args.mode == "htts":
         print(f"{Fore.GREEN}Sending distant request...{Style.RESET_ALL}")
         heavy_mode(args.address+":"+args.port, args.audio, "/distantrequest")
