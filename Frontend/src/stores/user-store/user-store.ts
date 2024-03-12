@@ -71,6 +71,13 @@ export const useUserStore = defineStore('useUserStore', {
       console.log('settings', index)
       this.isHistories = false
       this.selectedAssistant = index
+    },
+
+    async addAssistant(id: number, code: number) {
+      this.isLoading = true
+      await UserService.addAssistant(id, code)
+      this.fetchAssistants(id)
+      this.isLoading = false
     }
   }
 })
