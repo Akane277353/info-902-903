@@ -1,3 +1,4 @@
+import '@mdi/font/css/materialdesignicons.css'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
@@ -12,7 +13,10 @@ import 'vuetify/styles'
 
 const vuetify = createVuetify({
   components,
-  directives
+  directives,
+  icons: {
+    defaultSet: 'mdi'
+  }
 })
 
 const app = createApp(App)
