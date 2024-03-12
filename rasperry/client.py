@@ -117,9 +117,9 @@ if __name__ == "__main__":
     elif args.mode == "hntts":
         print(f"{Fore.GREEN}Sending distant request no tts...{Style.RESET_ALL}")
         res = heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/distantnottsrequest")
-        tts(args.address+":"+args.port, res, "/home/pi/piper/fr-gilles-low.onnx","fr")
+        tts("https://localhost:8080", res, "/home/pi/piper/fr-gilles-low.onnx","fr")
     elif args.mode == "htts":
         print(f"{Fore.GREEN}Sending distant request...{Style.RESET_ALL}")
-        heavy_mode(args.address+":"+args.port, args.audio, "/distantrequest")
+        heavy_mode("https://localhost:8080", args.audio, "/distantrequest")
     else:
         print(f"{Fore.RED}Wrong mode used...{Style.RESET_ALL}")
