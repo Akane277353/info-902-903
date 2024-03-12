@@ -37,4 +37,10 @@ public class AssistantController {
     public ResponseEntity<AssistantResponse> GetAssistant(@PathVariable Integer code){
         return ResponseEntity.ok(assistantService.getAssistant(code));
     }
+
+    @GetMapping("/assistantsofuser/{id}")
+    public ResponseEntity<List<AssistantResponse>> GetAssistantsOfUser(@PathVariable Long id){
+        return ResponseEntity.ok(assistantService.getAssistantOfUser(id));
+    }
+
 }
