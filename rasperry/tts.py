@@ -9,7 +9,7 @@ def random_string(length):
 
 
 def run_tts(text, speaker="/home/pi/piper/fr-gilles-low.onnx", save_location="output.wav"):
-    os.system("echo {} | /home/pi/piper/./piper --model {} --outpu_file {}".format(text, speaker, save_location))
+    os.system("echo {} | /home/pi/piper/./piper --model {} --output_file {}".format(text, speaker, save_location))
  
 
 if __name__ == "__main__":
