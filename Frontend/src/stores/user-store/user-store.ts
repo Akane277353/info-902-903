@@ -78,6 +78,24 @@ export const useUserStore = defineStore('useUserStore', {
       await UserService.addAssistant(id, code)
       this.fetchAssistants(id)
       this.isLoading = false
+    },
+
+    async setAssistantConfiguration(
+      language: string,
+      voice: string,
+      wifiSSID: string,
+      wifiPassword: string
+    ) {
+      this.isLoading = true
+      await UserService.setAssistantConfiguration(
+        this.getAssistants[this.getSelectedAssistant].code,
+        language,
+        voice,
+        wifiSSID,
+        wifiPassword
+      )
+      this.fetchAssistants(this.user?.id)
+      this.isLoading = false
     }
   }
 })

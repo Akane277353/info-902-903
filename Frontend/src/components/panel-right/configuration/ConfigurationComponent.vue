@@ -8,6 +8,10 @@ const language = ref(userStore.getAssistants[userStore.getSelectedAssistant].lan
 const voice = ref(userStore.getAssistants[userStore.getSelectedAssistant].voice)
 const ssid = ref(userStore.getAssistants[userStore.getSelectedAssistant].wifiSSID)
 const passwordWifi = ref(userStore.getAssistants[userStore.getSelectedAssistant].wifiPassword)
+
+function setConfiguration() {
+  userStore.setAssistantConfiguration(language.value, voice.value, ssid.value, passwordWifi.value)
+}
 </script>
 
 <template>
@@ -22,7 +26,7 @@ const passwordWifi = ref(userStore.getAssistants[userStore.getSelectedAssistant]
       v-model="passwordWifi"
     ></v-text-field>
 
-    <v-btn color="success" dark>Enregistrer</v-btn>
+    <v-btn color="success" @click="setConfiguration" dark>Enregistrer</v-btn>
   </div>
 </template>
 

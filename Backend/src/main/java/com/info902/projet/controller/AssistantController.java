@@ -1,5 +1,6 @@
 package com.info902.projet.controller;
 
+import com.info902.projet.controller.request.SetConfigRequest;
 import com.info902.projet.controller.response.AssistantResponse;
 import com.info902.projet.controller.response.ConfigResponse;
 import com.info902.projet.model.Assistant;
@@ -41,6 +42,10 @@ public class AssistantController {
     @GetMapping("/assistantsofuser/{id}")
     public ResponseEntity<List<AssistantResponse>> GetAssistantsOfUser(@PathVariable Long id){
         return ResponseEntity.ok(assistantService.getAssistantOfUser(id));
+    }
+    @PostMapping("/setconfig")
+    public void SetConfiguration(@RequestBody SetConfigRequest setConfigRequest){
+        assistantService.setConfiguration(setConfigRequest);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.info902.projet.service;
 
+import com.info902.projet.controller.request.SetConfigRequest;
 import com.info902.projet.controller.response.AssistantResponse;
 import com.info902.projet.controller.response.ConfigResponse;
 import com.info902.projet.controller.response.HistoryResponse;
@@ -75,6 +76,16 @@ public class AssistantService {
             listAssistant.add(getAssistant(assistants.get(i).getCode()));
         }
         return listAssistant;
+    }
+
+    public void setConfiguration(SetConfigRequest setConfigRequest){
+        Assistant assistant = assistantRepository.findByCode(setConfigRequest.getCode()).orElseThrow();
+        assistant.setLanguage(setConfigRequest.getLanguage());
+        assistant.setVoice(setConfigRequest.getVoice());
+        assistant.setWifiSSID(setConfigRequest.getWifiSSID());
+        assistant.setWifiPassword(setConfigRequest.getWifiPassword());
+        assistantRepository.save(assistant);
+
     }
 
 }

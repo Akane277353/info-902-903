@@ -49,4 +49,25 @@ export class UserService {
       return Promise.reject(e)
     }
   }
+
+  static async setAssistantConfiguration(
+    code: number,
+    language: string,
+    voice: string,
+    wifiSSID: string,
+    wifiPassword: string
+  ) {
+    const params = {
+      code: code,
+      language: language,
+      voice: voice,
+      wifiSSID: wifiSSID,
+      wifiPassword: wifiPassword
+    }
+    try {
+      await instance.post<void>('/assistant/setconfig', params)
+    } catch (e) {
+      return Promise.reject(e)
+    }
+  }
 }
