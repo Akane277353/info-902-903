@@ -1,6 +1,7 @@
 import router from '@/router'
 import { defineStore } from 'pinia'
 import type { Assistant } from './models/Assistant'
+import type { Histories } from './models/Histories'
 import type { User } from './models/User'
 import { UserService } from './service/user.service'
 
@@ -8,18 +9,21 @@ interface State {
   user: User | null
   isLoading: boolean
   assistants: Assistant[]
+  histories: Histories[]
 }
 
 export const useUserStore = defineStore('useUserStore', {
   state: (): State => ({
     user: null,
     isLoading: false,
-    assistants: []
+    assistants: [],
+    histories: []
   }),
   getters: {
     getUser: (state) => state.user,
     getIsLoading: (state) => state.isLoading,
-    getAssistants: (state) => state.assistants
+    getAssistants: (state) => state.assistants,
+    getHistory: (state) => state.histories
   },
   actions: {
     async register(pseudo: string, password: string) {
@@ -49,6 +53,10 @@ export const useUserStore = defineStore('useUserStore', {
       const assistants = await UserService.getAssistants(userId)
       this.assistants = assistants
       this.isLoading = false
+    },
+
+    setHistory(index: number) {
+      this.histories = this.assistants[index].histories
     }
   }
 })
