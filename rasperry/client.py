@@ -107,9 +107,6 @@ if __name__ == "__main__":
     #print(stt("https://localhost:8080", "output.wav", mode="/heavystt"))
     #tts("https://localhost:8080", "bonjour, je me nomme gustave. et vous?", "output.wav","fr", mode="/heavytts")
 
-    r = requests.post("https://141.145.207.6:8080/hello", '{}', verify=False)
-
-    print(r.text)
     if args.mode == "local":
         print(f"{Fore.GREEN}Sending local request...{Style.RESET_ALL}")
         res = local_mode(args.address+":"+args.port, args.audio, "/localrequest")
