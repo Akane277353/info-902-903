@@ -2,6 +2,9 @@ import requests
 import json
 import argparse
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from colorama import init as colorama_init
+from colorama import Fore
+from colorama import Style
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
@@ -86,15 +89,15 @@ def heavy_mode_l_tts(address, audio, mode):
     url = address+mode
     files = {'audio_file': open(audio, 'rb')}
     r = requests.post(url, files=files, verify=False)
-    if r.status_code == 200:
-        with open("a.wav", 'wb') as file:
-            file.write(r.content) != 200
+    return r.text
 
 
 if __name__ == "__main__":
+    colorama_init()
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", default="local", type=str, help="server or local")
-    parser.add_argument("--address", default="https://localhost:8080", type=str, help="server address")
+    parser.add_argument("--address", default="https://141.145.207.6", type=str, help="server address")
+    parser.add_argument("--port", default="8080", type=str, help="audio file")
     parser.add_argument("--audio", default="output.wav", type=str, help="audio file")
     args = parser.parse_args()
 
@@ -107,11 +110,12 @@ if __name__ == "__main__":
 
     print(r.text)
     if args.mode == "local":
-        print("sending local request")
-        print(local_mode("https://141.145.207.6:8080", args.audio, "/localrequest"))
+        print(f"{Fore.GREEN}Sending local request...{Style.RESET_ALL}")
+        print(local_mode(args.address+":"+args.port, args.audio, "/localrequest"))
     elif args.mode == "hltts":
-        print("sending heavy no tts request")
-        print(heavy_mode_l_tts("https://141.145.207.6:8080", args.audio, "/heavynottsrequest"))
+        print(f"{Fore.GREEN}Sending distant request no tts...{Style.RESET_ALL}")
+        print(heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/heavynottsrequest"))
     else:
-        heavy_mode("https://141.145.207.6:8080", args.audio, "/heavyrequest")
+        print(f"{Fore.GREEN}Sending distant request...{Style.RESET_ALL}")
+        heavy_mode(args.address+":"+args.port, args.audio, "/heavyrequest")
     

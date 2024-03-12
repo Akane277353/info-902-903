@@ -37,8 +37,11 @@ def init_heavy_stt():
 
 
 def run_heavy_stt(pipe, audio):
-    sample = open(audio, "rb").read()
-    return pipe(sample)["text"]
+    with open(audio, "rb") as file:
+        sample = file.read()
+        return pipe(sample)["text"]
+    
+    return "Error: Could not convert audio to text"
 
 
 if __name__ == "__main__":
