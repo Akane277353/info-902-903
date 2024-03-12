@@ -229,10 +229,12 @@ if __name__ == '__main__':
     colorama_init()
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", default="local", type=str, help="server or local")
+    parser.add_argument("--port", default=8080, type=int, help="server port")
+    parser.add_argument("--address", default="localhost", type=str, help="server address")
     args = parser.parse_args()
 
     global mode
     mode = args.mode
 
     init_globals()
-    run(host='localhost', port=8080, debug=True, server_max_request_body_size=MAX_REQUEST_BODY_SIZE)
+    run(host='localhost', port=args.port, debug=True, server_max_request_body_size=MAX_REQUEST_BODY_SIZE)
