@@ -1,8 +1,22 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user-store/user-store'
+import { ref, watchEffect } from 'vue'
 import settings from '../../../assets/settings.png'
 
 const userStore = useUserStore()
+const histolist = ref<HTMLDivElement | null>(null)
+
+const scrollToBottom = () => {
+  if (histolist.value) {
+    histolist.value.scrollTo({
+      top: histolist.value.scrollHeight
+    })
+  }
+}
+
+watchEffect(() => {
+  scrollToBottom()
+})
 </script>
 
 <template>
@@ -17,7 +31,7 @@ const userStore = useUserStore()
         @click="userStore.setSettings(userStore.getSelectedAssistant)"
       />
     </div>
-    <div v-if="userStore.getHistory.length > 0" class="histolist">
+    <div v-if="userStore.getHistory.length > 0" class="histolist" ref="histolist">
       <div class="histo" v-for="(history, index) in userStore.getHistory" :key="index">
         <v-card class="request">{{ history.request }}</v-card>
         <v-card class="response" color="success">{{ history.response }}</v-card>
