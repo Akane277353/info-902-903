@@ -46,6 +46,9 @@ def tts(address, text, speaker, lang, mode="/tts"): # mode heavytts
     if r.status_code == 200:
         with open("a.wav", 'wb') as file:
             file.write(r.content) != 200
+            return True
+    else:
+        return False
     
 
 def ollama(model="mistral", text="hello"):
@@ -112,7 +115,7 @@ if __name__ == "__main__":
     colorama_init()
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", default="local", type=str, help="server or local")
-    parser.add_argument("--address", default="https://141.145.207.6", type=str, help="server address")
+    parser.add_argument("--address", default="https://localhost", type=str, help="server address")
     parser.add_argument("--port", default="8080", type=str, help="audio file")
     parser.add_argument("--audio", default="output.wav", type=str, help="audio file")
     parser.add_argument("--id", default=1, type=int, help="id de la personne")
@@ -128,12 +131,12 @@ if __name__ == "__main__":
         print(f"{Fore.GREEN}Sending local request...{Style.RESET_ALL}")
         res = local_mode(args.address+":"+args.port, args.audio, "/localrequest", args.id)
         print(res)
-        #tts(args.address+":"+args.port, res, "/home/pi/piper/fr-gilles-low.onnx","fr")
+        tts(args.address+":"+args.port, res, "/home/pi/piper/fr-gilles-low.onnx","fr")
     elif args.mode == "hntts":
         print(f"{Fore.GREEN}Sending distant request no tts...{Style.RESET_ALL}")
         res = heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/distantnottsrequest", args.id, args.model)
         print(res)
-        #tts("https://localhost:8080", res, "/home/pi/piper/fr-gilles-low.onnx","fr")
+        tts("https://localhost:8080", res, "/home/pi/piper/fr-gilles-low.onnx","fr")
     elif args.mode == "htts":
         print(f"{Fore.GREEN}Sending distant request...{Style.RESET_ALL}")
         heavy_mode("https://localhost:8080", args.audio, "/distantrequest", args.id, args.model)

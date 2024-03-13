@@ -4,10 +4,10 @@ import { ref } from 'vue'
 
 const userStore = useUserStore()
 var dialog = ref(false)
-var code = ref('')
+var code = ref()
 
 function addAssistant() {
-  userStore.addAssistant(userStore.getUser?.id, code.value)
+  userStore.addAssistant(userStore.getUser.id, code.value)
   dialog.value = false
 }
 </script>
@@ -26,7 +26,7 @@ function addAssistant() {
 
     <v-dialog v-model="dialog" width="auto">
       <v-card max-width="400" title="Ajouter un Noodle Home">
-        <v-text-field label="Code" variant="outlined" v-model="code"></v-text-field>
+        <v-text-field label="Code" variant="outlined" v-model="code" type="number"></v-text-field>
         <template v-slot:actions>
           <v-btn class="ms-auto" text="Ajouter" @click="addAssistant"></v-btn>
         </template>
