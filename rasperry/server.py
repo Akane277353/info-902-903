@@ -1,13 +1,9 @@
 from bottle import run, post, request, response, get, route, static_file, Bottle, ServerAdapter
-import random
-import string
-import json
-import requests
+import random, string, json, requests, argparse, shutil
 from heavy_tts import *
 from stt import *
 from heavy_stt import *
 from tts import *
-import argparse
 
 MAX_REQUEST_BODY_SIZE = 200 * 1024 * 1024
 _stt = None
@@ -24,6 +20,11 @@ _bdd = None
 ###############################################################
 
 
+
+
+def clean():
+    shutil.rmtree("temp")
+    os.mkdir("temp")
 
 
 def ollama(model="tinyllama", text="hello"):
@@ -48,14 +49,14 @@ def ollama(model="tinyllama", text="hello"):
 
 def light_tts(text, speaker, lang):
     global _tts
-    name = random_string(10) + ".wav"
+    name = "temp/"+ random_string(10) + ".wav"
     run_tts(text, speaker, name)
     return name
 
 
 def light_stt(request):
     global _stt
-    name = random_string(10) + ".wav"
+    name = "temp/"+ random_string(10) + ".wav"
     audio = request.files.get('audio_file')
     if audio:
         audio.save(name, overwrite=True)
@@ -68,7 +69,7 @@ def light_stt(request):
 
 def heavy_stt(request):
     global _heavy_stt
-    name = random_string(10) + ".wav"
+    name = "temp/"+ random_string(10) + ".wav"
     audio = request.files.get('audio_file')
     if audio:
         audio.save(name, overwrite=True)
@@ -80,7 +81,7 @@ def heavy_stt(request):
 
 def heavy_tts(text, speaker, lang):
     global _heavy_tts
-    name = random_string(10) + ".wav"
+    name = "temp/"+ random_string(10) + ".wav"
     run_heavy_tts(_heavy_tts, text, speaker, name, lang)
     return name
 
@@ -306,6 +307,7 @@ class SSLCherootAdapter(ServerAdapter):
 
 
 if __name__ == '__main__':
+    clean()
     colorama_init()
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", default="local", type=str, help="server or local")
