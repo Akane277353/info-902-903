@@ -62,6 +62,9 @@ export const useUserStore = defineStore('useUserStore', {
 
     async fetchAssistants() {
       this.isLoading = true
+      this.isHistories = true
+      this.selectedAssistant = 0
+      this.histories = []
       const assistants = await UserService.getAssistants(this.user.id)
       this.assistants = assistants
       this.isLoading = false

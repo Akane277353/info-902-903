@@ -13,7 +13,7 @@ const userStore = useUserStore()
     <AssistantListComponent />
     <div class="center">
       <HistoryListComponent v-if="userStore.getIsHistories" />
-      <ConfigurationComponent v-else />
+      <ConfigurationComponent v-if="!userStore.getIsHistories" />
     </div>
   </div>
 </template>
