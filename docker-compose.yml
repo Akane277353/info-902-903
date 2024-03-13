@@ -20,6 +20,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
     depends_on:
       - db
+    volumes:
+      - ./SQL:/var/lib/mysql
 
   assistant-frontend:
     build:
