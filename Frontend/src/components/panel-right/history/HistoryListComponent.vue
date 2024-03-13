@@ -17,11 +17,14 @@ const userStore = useUserStore()
         @click="userStore.setSettings(userStore.getSelectedAssistant)"
       />
     </div>
-    <div class="histolist">
+    <div v-if="userStore.getHistory.length > 0" class="histolist">
       <div class="histo" v-for="(history, index) in userStore.getHistory" :key="index">
         <v-card class="request">{{ history.request }}</v-card>
         <v-card class="response" color="success">{{ history.response }}</v-card>
       </div>
+    </div>
+    <div v-else class="nohistory">
+      <p>Il n'y a pas d'historique</p>
     </div>
   </div>
 </template>
@@ -45,6 +48,13 @@ const userStore = useUserStore()
   flex-direction: column;
 }
 
+.nohistory {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
 .request {
   margin-top: 20px;
   margin-right: 10px;
