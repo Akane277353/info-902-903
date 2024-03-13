@@ -16,7 +16,15 @@ function setConfiguration() {
 
 <template>
   <div class="configuration">
-    <h1>Configuration</h1>
+    <div class="header">
+      <h1>Historique</h1>
+      <v-icon
+        class="icon"
+        icon="mdi-page-first"
+        size="30px"
+        @click="userStore.setHistory(userStore.getSelectedAssistant)"
+      ></v-icon>
+    </div>
     <v-text-field label="Langage" variant="outlined" v-model="language"></v-text-field>
     <v-text-field label="Voix" variant="outlined" v-model="voice"></v-text-field>
     <v-text-field label="SSID Wifi" variant="outlined" v-model="ssid"></v-text-field>
@@ -37,5 +45,15 @@ function setConfiguration() {
   flex-direction: column;
   gap: 20px;
   padding: 40px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon {
+  cursor: pointer;
 }
 </style>

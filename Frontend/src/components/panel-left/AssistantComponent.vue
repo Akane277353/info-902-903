@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import settings from '../../assets/settings.png'
 const props = defineProps({
-  code: { type: Number, required: true }
+  code: { type: Number, required: true },
+  isactivated: { type: Boolean, required: true }
 })
-
-const emit = defineEmits(['clickSettings', 'clickAssist'])
 </script>
 
 <template>
   <div>
-    <v-card class="d-flex" height="130" width="200">
-      <v-card-actions @click="emit('clickAssist')">
+    <v-card class="d-flex" height="130" width="200" :color="isactivated ? 'success' : ''">
+      <v-card-actions>
         <h1>{{ props.code }}</h1>
       </v-card-actions>
-      <img width="30" height="30" :src="settings" alt="settings" @click="emit('clickSettings')" />
     </v-card>
   </div>
 </template>

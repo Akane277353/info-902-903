@@ -12,8 +12,12 @@ const userStore = useUserStore()
   <div class="dashboard">
     <AssistantListComponent />
     <div class="center">
-      <HistoryListComponent v-if="userStore.getIsHistories" />
-      <ConfigurationComponent v-if="!userStore.getIsHistories" />
+      <HistoryListComponent
+        v-if="userStore.getIsHistories && userStore.getSelectedAssistant != -1"
+      />
+      <ConfigurationComponent
+        v-if="!userStore.getIsHistories && userStore.getSelectedAssistant != -1"
+      />
     </div>
   </div>
 </template>

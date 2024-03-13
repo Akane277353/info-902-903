@@ -34,6 +34,7 @@ async function addAssistant() {
     <v-dialog v-model="dialog" width="auto">
       <v-card max-width="400" title="Ajouter un Noodle Home">
         <v-text-field
+          class="text-field"
           label="Code"
           variant="outlined"
           v-model="code"
@@ -49,7 +50,7 @@ async function addAssistant() {
 </template>
 
 <style scoped>
-v-text-field {
-  width: 80%;
+.text-field {
+  padding: 20px;
 }
 </style>

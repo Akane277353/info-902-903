@@ -9,10 +9,6 @@ function setHistory(index: number) {
   userStore.setHistory(index)
 }
 
-function setSettings(index: number) {
-  userStore.setSettings(index)
-}
-
 function refresh() {
   userStore.fetchAssistants()
 }
@@ -34,11 +30,12 @@ function refresh() {
     </div>
 
     <AssistantComponent
+      class="card"
       v-for="(assistant, index) of userStore.getAssistants"
       :key="index"
       :code="assistant.code"
-      @click-assist="setHistory(index)"
-      @click-settings="setSettings(index)"
+      :isactivated="index == userStore.getSelectedAssistant"
+      @click="setHistory(index)"
     />
   </div>
 </template>
@@ -60,5 +57,9 @@ function refresh() {
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+.card {
+  cursor: pointer;
 }
 </style>

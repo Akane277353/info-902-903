@@ -21,7 +21,7 @@ export const useUserStore = defineStore('useUserStore', {
     assistants: [],
     histories: [],
     isHistories: true,
-    selectedAssistant: 0
+    selectedAssistant: -1
   }),
   getters: {
     getUser: (state) => state.user,
@@ -63,7 +63,7 @@ export const useUserStore = defineStore('useUserStore', {
     async fetchAssistants() {
       this.isLoading = true
       this.isHistories = true
-      this.selectedAssistant = 0
+      this.selectedAssistant = -1
       this.histories = []
       const assistants = await UserService.getAssistants(this.user.id)
       this.assistants = assistants
@@ -84,7 +84,9 @@ export const useUserStore = defineStore('useUserStore', {
     async addAssistant(id: number, code: number) {
       this.isLoading = true
       const response = await UserService.addAssistant(id, code)
-      this.fetchAssistants()
+      if (response) {
+        this.fetchAssistants()
+      }
       this.isLoading = false
       return response
     },
