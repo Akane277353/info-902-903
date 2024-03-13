@@ -5,6 +5,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from colorama import init as colorama_init
 from colorama import Fore
 from colorama import Style
+import shutil
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
@@ -45,8 +46,8 @@ def tts(address, text, speaker, lang, mode="/tts"): # mode heavytts
     r = requests.post(address+mode, data=json_data, headers=headers, verify=False)
     if r.status_code == 200:
         with open("a.wav", 'wb') as file:
-            file.write(r.content) != 200
-            return True
+            shutil.copyfileobj(r.raw, file)
+        return True
     else:
         return False
     
@@ -97,7 +98,7 @@ def heavy_mode(address, audio, mode, id, model):
     r = requests.post(url, files=files, verify=False)
     if r.status_code == 200:
         with open("a.wav", 'wb') as file:
-            file.write(r.content) != 200
+            file.write(r.content)
 
 
 def heavy_mode_l_tts(address, audio, mode, id, model):
@@ -131,7 +132,7 @@ if __name__ == "__main__":
         print(f"{Fore.GREEN}Sending local request...{Style.RESET_ALL}")
         res = local_mode(args.address+":"+args.port, args.audio, "/localrequest", args.id)
         print(res)
-        tts(args.address+":"+args.port, res, "/home/pi/piper/fr-gilles-low.onnx","fr")
+        print(tts(args.address+":"+args.port, res, "/home/pi/piper/fr-gilles-low.onnx","fr"))
     elif args.mode == "hntts":
         print(f"{Fore.GREEN}Sending distant request no tts...{Style.RESET_ALL}")
         res = heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/distantnottsrequest", args.id, args.model)
