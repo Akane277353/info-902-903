@@ -70,25 +70,40 @@ def ollama(model="mistral", text="hello"):
     return result
 
 
-def local_mode(address, audio, mode):
+def local_mode(address, audio, mode, id):
     url = address+mode
-    files = {'audio_file': open(audio, 'rb')}
+    data = {
+        'code': id
+    }
+    files = {'audio_file': open(audio, 'rb'), 'data': json.dumps(data)}
     r = requests.post(url, files=files, verify=False)
-    return r.text
+    if r.status_code == 200:
+        return r.text
+    else:
+        print(r.status_code)
+        return "Error"
 
 
-def heavy_mode(address, audio, mode):
+def heavy_mode(address, audio, mode, id, model):
     url = address+mode
-    files = {'audio_file': open(audio, 'rb')}
+    data = {
+        'code': id,
+        'model': model
+    }
+    files = {'audio_file': open(audio, 'rb'), 'data': json.dumps(data)}
     r = requests.post(url, files=files, verify=False)
     if r.status_code == 200:
         with open("a.wav", 'wb') as file:
             file.write(r.content) != 200
 
 
-def heavy_mode_l_tts(address, audio, mode):
+def heavy_mode_l_tts(address, audio, mode, id, model):
     url = address+mode
-    files = {'audio_file': open(audio, 'rb')}
+    data = {
+        'code': id,
+        'model': model
+    }
+    files = {'audio_file': open(audio, 'rb'), 'data': json.dumps(data)}
     r = requests.post(url, files=files, verify=False)
     return r.text
 
@@ -100,6 +115,8 @@ if __name__ == "__main__":
     parser.add_argument("--address", default="https://141.145.207.6", type=str, help="server address")
     parser.add_argument("--port", default="8080", type=str, help="audio file")
     parser.add_argument("--audio", default="output.wav", type=str, help="audio file")
+    parser.add_argument("--id", default=1, type=int, help="id de la personne")
+    parser.add_argument("--model", default="mistral", type=str, help="model")
     args = parser.parse_args()
 
 
@@ -109,14 +126,16 @@ if __name__ == "__main__":
 
     if args.mode == "local":
         print(f"{Fore.GREEN}Sending local request...{Style.RESET_ALL}")
-        res = local_mode(args.address+":"+args.port, args.audio, "/localrequest")
-        tts(args.address+":"+args.port, res, "/home/pi/piper/fr-gilles-low.onnx","fr")
+        res = local_mode(args.address+":"+args.port, args.audio, "/localrequest", args.id)
+        print(res)
+        #tts(args.address+":"+args.port, res, "/home/pi/piper/fr-gilles-low.onnx","fr")
     elif args.mode == "hntts":
         print(f"{Fore.GREEN}Sending distant request no tts...{Style.RESET_ALL}")
-        res = heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/distantnottsrequest")
-        tts("https://localhost:8080", res, "/home/pi/piper/fr-gilles-low.onnx","fr")
+        res = heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/distantnottsrequest", args.id, args.model)
+        print(res)
+        #tts("https://localhost:8080", res, "/home/pi/piper/fr-gilles-low.onnx","fr")
     elif args.mode == "htts":
         print(f"{Fore.GREEN}Sending distant request...{Style.RESET_ALL}")
-        heavy_mode("https://localhost:8080", args.audio, "/distantrequest")
+        heavy_mode("https://localhost:8080", args.audio, "/distantrequest", args.id, args.model)
     else:
         print(f"{Fore.RED}Wrong mode used...{Style.RESET_ALL}")

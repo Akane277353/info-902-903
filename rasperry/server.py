@@ -2,6 +2,7 @@ from bottle import run, post, request, response, get, route, static_file, Bottle
 import random
 import string
 import json
+import requests
 from heavy_tts import *
 from stt import *
 from heavy_stt import *
@@ -13,6 +14,7 @@ _stt = None
 _heavy_tts = None
 _heavy_stt = None
 _mode = None
+_bdd = None
 
 
 
@@ -87,14 +89,36 @@ def random_string(length):
     return ''.join(random.choice(string.ascii_letters) for m in range(length))
 
 
-def init_globals():
+def add_to_json(data, json_data):
+    data_dict = json.loads(json_data)
+    for key in data:
+        data_dict[key] = data[key]
+    return json.dumps(data_dict)
+
+
+def send_to_bdd(json_data):
+    global _bdd
+    print(f"{Fore.GREEN}Sending data to bdd....{Style.RESET_ALL}")
+    headers = {'Content-Type': 'application/json'}
+    r = requests.post(_bdd+"/history/new", headers=headers, data=json_data)
+    if r.status_code == 200:
+        print(f"{Fore.GREEN}Data sent to bdd....{Style.RESET_ALL}")
+    else:
+        print(f"{Fore.RED}Error sending data to bdd....{Style.RESET_ALL}")
+        print(f"{Fore.RED}Status code : {r.status_code}{Style.RESET_ALL}")
+
+
+def init_globals(args):
     global _tts
     global _stt
     global _heavy_tts
     global _heavy_stt
-    global mode
+    global _mode
+    global _bdd
+    _mode = args.mode
+    _bdd = args.bdd
     
-    if mode == "local":
+    if _mode == "local":
         _stt = init_stt()
     else:
         _stt = init_stt()
@@ -144,7 +168,7 @@ def heavy_stt_req():
 
 @app.route('/tts', method = 'POST')
 def light_tts_req():
-    global mode
+    global _mode
     try:
         json_data = request.json
         if json_data is not None:
@@ -165,8 +189,8 @@ def light_tts_req():
 
 @app.route('/heavytts', method = 'POST')
 def heavy_tts_req():
-    global mode
-    if mode == "server":
+    global _mode
+    if _mode == "server":
         try:
             json_data = request.json
             if json_data is not None:
@@ -198,8 +222,15 @@ def heavy_tts_req():
 def local_req():
     try:
         print(f"{Fore.GREEN}Starting Local Request...{Style.RESET_ALL}")
-        data = light_stt(request)
-        llm = ollama(model="tinyllama", text=data)
+        json_data = request.files.get('data')
+        json_data = json_data.file.read().decode('utf-8')
+        req = light_stt(request)
+        llm = ollama(model="tinyllama", text=req)
+        json_data = add_to_json({
+            "response": llm,
+            "request": req
+        }, json_data)
+        send_to_bdd(json_data)
         return llm
 
     except Exception as e:
@@ -211,11 +242,17 @@ def local_req():
 def distant_req():
     try:
         print(f"{Fore.GREEN}Starting Distant Request...{Style.RESET_ALL}")
-        data = heavy_stt(request)
-        print(data)
-        llm = ollama(model="mistral", text=data)
-        print(llm)
+        json_data = request.files.get('data')
+        json_data = json_data.file.read().decode('utf-8')
+        model = json.loads(json_data)["model"]
+        req = heavy_stt(request)
+        llm = ollama(model=model, text=req)
         name = heavy_tts(llm, "output.wav", "fr")
+        json_data = add_to_json({
+            "response": llm,
+            "request": req
+        }, json_data)
+        send_to_bdd(json_data)
         return static_file(name, root='.')
 
     except Exception as e:
@@ -227,9 +264,16 @@ def distant_req():
 def distant_no_tts_req():
     try:
         print(f"{Fore.GREEN}Starting Distant No TTS Request...{Style.RESET_ALL}")
-        data = heavy_stt(request)
-        print(data)
-        llm = ollama(model="mistral", text=data)
+        json_data = request.files.get('data')
+        json_data = json_data.file.read().decode('utf-8')
+        model = json.loads(json_data)["model"]
+        req = heavy_stt(request)
+        llm = ollama(model=model, text=req)
+        json_data = add_to_json({
+            "response": llm,
+            "request": req
+        }, json_data)
+        send_to_bdd(json_data)
         return llm
 
     except Exception as e:
@@ -267,12 +311,10 @@ if __name__ == '__main__':
     parser.add_argument("--mode", default="local", type=str, help="server or local")
     parser.add_argument("--port", default=8080, type=int, help="server port")
     parser.add_argument("--address", default="localhost", type=str, help="server address")
+    parser.add_argument("--bdd", default="http://141.145.207.6:8080", type=str, help="model")
     args = parser.parse_args()
 
-    global mode
-    mode = args.mode
-
-    init_globals()
+    init_globals(args)
     run(
         app, 
         host='0.0.0.0', 
