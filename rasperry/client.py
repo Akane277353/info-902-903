@@ -46,7 +46,7 @@ def tts(address, text, speaker, lang, mode="/tts"): # mode heavytts
     r = requests.post(address+mode, data=json_data, headers=headers, verify=False)
     if r.status_code == 200:
         with open("a.wav", 'wb') as file:
-            shutil.copyfileobj(r.raw, file)
+            file.write(r.content)
         return True
     else:
         return False
@@ -99,6 +99,9 @@ def heavy_mode(address, audio, mode, id, model):
     if r.status_code == 200:
         with open("a.wav", 'wb') as file:
             file.write(r.content)
+        return True
+    else:
+        return False
 
 
 def heavy_mode_l_tts(address, audio, mode, id, model):
@@ -126,8 +129,8 @@ if __name__ == "__main__":
 
     #print(stt("https://localhost:8080", "output.wav"))
     #print(stt("https://localhost:8080", "output.wav", mode="/heavystt"))
-    #tts("https://localhost:8080", "bonjour, je me nomme gustave. et vous?", "output.wav","fr", mode="/heavytts")
-
+    #tts("https://localhost:8080", "bonjour, je me nomme gustave. et vous?", "/home/pi/piper/fr-gilles-low.onnx","fr")
+    
     if args.mode == "local":
         print(f"{Fore.GREEN}Sending local request...{Style.RESET_ALL}")
         res = local_mode(args.address+":"+args.port, args.audio, "/localrequest", args.id)
@@ -143,3 +146,4 @@ if __name__ == "__main__":
         heavy_mode("https://localhost:8080", args.audio, "/distantrequest", args.id, args.model)
     else:
         print(f"{Fore.RED}Wrong mode used...{Style.RESET_ALL}")
+    
