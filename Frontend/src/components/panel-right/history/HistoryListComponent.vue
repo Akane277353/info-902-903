@@ -40,7 +40,6 @@ const userStore = useUserStore()
 
 .response {
   margin-top: 20px;
-  margin-left: 10px;
   margin-right: auto;
   max-width: 80%;
   padding: 5px;
