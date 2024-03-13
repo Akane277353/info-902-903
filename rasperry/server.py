@@ -247,6 +247,7 @@ def distant_req():
         json_data = json_data.file.read().decode('utf-8')
         model = json.loads(json_data)["model"]
         req = heavy_stt(request)
+        os.system(f"ollama pull {model}")
         llm = ollama(model=model, text=req)
         name = heavy_tts(llm, "output.wav", "fr")
         json_data = add_to_json({
@@ -268,6 +269,7 @@ def distant_no_tts_req():
         json_data = request.files.get('data')
         json_data = json_data.file.read().decode('utf-8')
         model = json.loads(json_data)["model"]
+        os.system(f"ollama pull {model}")
         req = heavy_stt(request)
         llm = ollama(model=model, text=req)
         json_data = add_to_json({
