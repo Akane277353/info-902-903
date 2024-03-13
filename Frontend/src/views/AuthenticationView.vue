@@ -8,6 +8,7 @@ const pseudo = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const tab = ref('one')
+var error = ref('')
 
 function register() {
   if (pseudo.value && password.value && confirmPassword.value === password.value) {
@@ -15,9 +16,15 @@ function register() {
   }
 }
 
-function login() {
+async function login() {
+  error.value = ''
   if (pseudo.value && password.value) {
-    userStore.login(pseudo.value, password.value)
+    const isLogin = await userStore.login(pseudo.value, password.value)
+    if (isLogin == false) {
+      error.value = 'Connexion échouée'
+    } else {
+      error.value = ''
+    }
   }
 }
 
@@ -50,6 +57,7 @@ const samePassword = [
               variant="outlined"
               color="success"
               type="password"
+              :error-messages="error"
             ></v-text-field>
 
             <v-btn @click="login" color="success" :loading="userStore.getIsLoading"

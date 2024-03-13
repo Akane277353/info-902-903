@@ -32,7 +32,7 @@ export const useUserStore = defineStore('useUserStore', {
     getSelectedAssistant: (state) => state.selectedAssistant
   },
   actions: {
-    async register(pseudo: string, password: string) {
+    async register(pseudo: string, password: string): Promise<boolean> {
       this.isLoading = true
       const user = await UserService.register(pseudo, password)
       this.user = user
@@ -40,10 +40,13 @@ export const useUserStore = defineStore('useUserStore', {
       if (user) {
         router.push('/dashboard')
         this.fetchAssistants(user.id)
+        return true
+      } else {
+        return false
       }
     },
 
-    async login(pseudo: string, password: string) {
+    async login(pseudo: string, password: string): Promise<boolean> {
       this.isLoading = true
       const user = await UserService.login(pseudo, password)
       this.user = user
@@ -51,6 +54,9 @@ export const useUserStore = defineStore('useUserStore', {
       if (user) {
         router.push('/dashboard')
         this.fetchAssistants(user.id)
+        return true
+      } else {
+        return false
       }
     },
 
@@ -62,14 +68,12 @@ export const useUserStore = defineStore('useUserStore', {
     },
 
     setHistory(index: number) {
-      console.log('history', index)
       this.histories = this.assistants[index].histories
       this.isHistories = true
       this.selectedAssistant = index
     },
 
     setSettings(index: number) {
-      console.log('settings', index)
       this.isHistories = false
       this.selectedAssistant = index
     },

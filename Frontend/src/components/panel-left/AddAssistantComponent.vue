@@ -8,12 +8,12 @@ var code = ref()
 var error = ref('')
 
 async function addAssistant() {
-  error.value = 'false'
+  error.value = ''
   var response = await userStore.addAssistant(userStore.getUser.id, code.value)
   if (response == false) {
     error.value = 'Code invalide'
   } else {
-    error.value = 'false'
+    error.value = ''
     dialog.value = false
   }
 }
