@@ -312,14 +312,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", default="local", type=str, help="server or local")
     parser.add_argument("--port", default=8080, type=int, help="server port")
-    parser.add_argument("--address", default="localhost", type=str, help="server address")
+    parser.add_argument("--address", default="0.0.0.0", type=str, help="server address")
     parser.add_argument("--bdd", default="http://141.145.207.6:8080", type=str, help="model")
     args = parser.parse_args()
 
     init_globals(args)
     run(
         app, 
-        host='0.0.0.0', 
+        host=args.address, 
         port=args.port,
         server_max_request_body_size=MAX_REQUEST_BODY_SIZE,
         debug=1,
