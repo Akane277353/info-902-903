@@ -27,13 +27,13 @@ BDD: bdd address, default -> http://141.145.207.6:8080
 
 > python client.py --mode [MODE] --address [ADDRESS] --port [PORT] --audio [AUDIO] --id [ID] --model [MODEL]
 
-MODE: default -> 
+MODE: default -> local
 
     - local, if run on raspberry
     - hntts, if run on distant server, with local tts
     - htts, if tun on distant server
 
-ADDRESS: server address, default -> local
+ADDRESS: server address, default -> https://localhost
 
 PORT: server port, default -> 8080
 
