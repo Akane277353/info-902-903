@@ -59,10 +59,12 @@ public class UserService {
         Optional<Assistant> assistant = assistantRepository.findByCode(associateAssistantRequest.getCode());
         var isPresent = false;
         if(assistant.isPresent()){
-            assistant.get().setUser(user);
-            user.getAssistants().add(assistant.get());
-            userRepository.save(user);
-            isPresent = true;
+            if(assistant.get().getUser() == null) {
+                assistant.get().setUser(user);
+                user.getAssistants().add(assistant.get());
+                userRepository.save(user);
+                isPresent = true;
+            }
         }
         return isPresent;
 
