@@ -22,8 +22,11 @@ public class History {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(columnDefinition="TEXT")
     private String request;
 
+    @Column(columnDefinition="TEXT")
     private String response;
 
     private Date date;
