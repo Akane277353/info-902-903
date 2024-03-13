@@ -39,7 +39,7 @@ export const useUserStore = defineStore('useUserStore', {
       this.isLoading = false
       if (user) {
         router.push('/dashboard')
-        this.fetchAssistants(user.id)
+        this.fetchAssistants()
         return true
       } else {
         return false
@@ -53,16 +53,16 @@ export const useUserStore = defineStore('useUserStore', {
       this.isLoading = false
       if (user) {
         router.push('/dashboard')
-        this.fetchAssistants(user.id)
+        this.fetchAssistants()
         return true
       } else {
         return false
       }
     },
 
-    async fetchAssistants(userId: number) {
+    async fetchAssistants() {
       this.isLoading = true
-      const assistants = await UserService.getAssistants(userId)
+      const assistants = await UserService.getAssistants(this.user.id)
       this.assistants = assistants
       this.isLoading = false
     },
@@ -81,7 +81,7 @@ export const useUserStore = defineStore('useUserStore', {
     async addAssistant(id: number, code: number) {
       this.isLoading = true
       const response = await UserService.addAssistant(id, code)
-      this.fetchAssistants(id)
+      this.fetchAssistants()
       this.isLoading = false
       return response
     },
@@ -100,7 +100,7 @@ export const useUserStore = defineStore('useUserStore', {
         wifiSSID,
         wifiPassword
       )
-      this.fetchAssistants(this.user.id)
+      this.fetchAssistants()
       this.isLoading = false
     }
   }

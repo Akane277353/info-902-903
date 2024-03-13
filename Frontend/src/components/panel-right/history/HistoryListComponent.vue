@@ -6,9 +6,10 @@ const userStore = useUserStore()
 
 <template>
   <div class="history">
+    <h1>Historique</h1>
     <div class="histo" v-for="(history, index) in userStore.getHistory" :key="index">
-      <p class="request">{{ history.request }}</p>
-      <p class="response">{{ history.response }}</p>
+      <v-card class="request">{{ history.request }}</v-card>
+      <v-card class="response" color="success">{{ history.response }}</v-card>
     </div>
   </div>
 </template>
@@ -19,6 +20,9 @@ const userStore = useUserStore()
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 40px;
+  overflow: auto;
+  scrollbar-width: none;
 }
 
 .histo {
@@ -27,12 +31,17 @@ const userStore = useUserStore()
 }
 
 .request {
+  margin-top: 20px;
   margin-right: 10px;
   margin-left: auto;
+  max-width: 80%;
+  padding: 5px;
 }
 
 .response {
-  margin-left: 10px;
+  margin-top: 20px;
   margin-right: auto;
+  max-width: 80%;
+  padding: 5px;
 }
 </style>

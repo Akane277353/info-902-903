@@ -33,7 +33,6 @@ function setConfiguration() {
 <style scoped>
 .configuration {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;

@@ -9,7 +9,7 @@ const emit = defineEmits(['clickSettings', 'clickAssist'])
 
 <template>
   <div>
-    <v-card class="d-flex" height="200" width="300">
+    <v-card class="d-flex" height="130" width="200">
       <v-card-actions @click="emit('clickAssist')">
         <h1>{{ props.code }}</h1>
       </v-card-actions>

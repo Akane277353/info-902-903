@@ -11,13 +11,21 @@ const userStore = useUserStore()
 <template>
   <div class="dashboard">
     <AssistantListComponent />
-    <HistoryListComponent v-if="userStore.getIsHistories" />
-    <ConfigurationComponent v-else />
+    <div class="center">
+      <HistoryListComponent v-if="userStore.getIsHistories" />
+      <ConfigurationComponent v-else />
+    </div>
   </div>
 </template>
 
 <style scoped>
 .dashboard {
   display: flex;
+  height: 100vh;
+}
+
+.center {
+  scroll-behavior: smooth;
+  width: 100%;
 }
 </style>

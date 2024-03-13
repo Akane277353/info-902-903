@@ -21,13 +21,13 @@ async function addAssistant() {
 
 <template>
   <div>
-    <v-card height="200" width="300">
+    <v-card height="80" width="80">
       <v-card-actions class="justify-center w-100 h-100">
         <v-btn class="w-100 h-100" @click="dialog = true"
           ><v-icon
             color="green-darken-2"
             icon="mdi-plus"
-            size="80px"
+            size="70px"
           ></v-icon></v-btn></v-card-actions
     ></v-card>
 
