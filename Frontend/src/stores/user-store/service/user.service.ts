@@ -38,13 +38,14 @@ export class UserService {
     }
   }
 
-  static async addAssistant(id: number, code: number) {
+  static async addAssistant(id: number, code: number): Promise<boolean> {
     const params = {
       idUser: id,
       code: code
     }
     try {
-      const response = await instance.post<void>('/user/associate', params)
+      const response = await instance.post<boolean>('/user/associate', params)
+      return response.data
     } catch (e) {
       return Promise.reject(e)
     }

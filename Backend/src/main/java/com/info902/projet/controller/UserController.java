@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/associate")
-    public void Associate(@RequestBody AssociateAssistantRequest associateAssistantRequest){
-        userService.associateAssistant(associateAssistantRequest);
+    public boolean Associate(@RequestBody AssociateAssistantRequest associateAssistantRequest){
+        return userService.associateAssistant(associateAssistantRequest);
     }
 }

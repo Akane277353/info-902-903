@@ -54,12 +54,18 @@ public class UserService {
         }
     }
 
-    public void associateAssistant(AssociateAssistantRequest associateAssistantRequest){
+    public boolean associateAssistant(AssociateAssistantRequest associateAssistantRequest){
         User user = userRepository.findById(associateAssistantRequest.getIdUser()).orElseThrow();
-        Assistant assistant = assistantRepository.findByCode(associateAssistantRequest.getCode()).orElseThrow();
-        assistant.setUser(user);
-        user.getAssistants().add(assistant);
-        userRepository.save(user);
+        Optional<Assistant> assistant = assistantRepository.findByCode(associateAssistantRequest.getCode());
+        var isPresent = false;
+        if(assistant.isPresent()){
+            assistant.get().setUser(user);
+            user.getAssistants().add(assistant.get());
+            userRepository.save(user);
+            isPresent = true;
+        }
+        return isPresent;
+
 
 
     }

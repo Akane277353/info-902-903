@@ -76,9 +76,10 @@ export const useUserStore = defineStore('useUserStore', {
 
     async addAssistant(id: number, code: number) {
       this.isLoading = true
-      await UserService.addAssistant(id, code)
+      const response = await UserService.addAssistant(id, code)
       this.fetchAssistants(id)
       this.isLoading = false
+      return response
     },
 
     async setAssistantConfiguration(

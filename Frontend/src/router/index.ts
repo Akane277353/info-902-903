@@ -23,7 +23,6 @@ const router = createRouter({
 async function hasAccess() {
   const userStore = useUserStore()
   if (userStore.getUser.id === 0 || userStore.getUser.pseudo === '') {
-    console.log('No user found')
     router.push('/')
   }
 }
