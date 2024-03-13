@@ -23,7 +23,8 @@ _bdd = None
 
 
 def clean():
-    shutil.rmtree("temp")
+    if os.path.exists("temp"):
+        shutil.rmtree("temp")
     os.mkdir("temp")
 
 
