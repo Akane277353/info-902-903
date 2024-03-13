@@ -1,8 +1,10 @@
 # pip install pvrecorder
+# pip install pyaudio
 
 
 import wave
 import struct
+import pyaudio
 import RPi.GPIO as GPIO
 
 
