@@ -95,7 +95,7 @@ def heavy_mode(address, audio, mode, id, model):
         'model': model
     }
     files = {'audio_file': open(audio, 'rb'), 'data': json.dumps(data)}
-    r = requests.post(url, files=files, verify=False)
+    r = requests.post(url, files=files, verify=False, timeout=1000)
     if r.status_code == 200:
         with open("a.wav", 'wb') as file:
             file.write(r.content)
@@ -111,7 +111,7 @@ def heavy_mode_l_tts(address, audio, mode, id, model):
         'model': model
     }
     files = {'audio_file': open(audio, 'rb'), 'data': json.dumps(data)}
-    r = requests.post(url, files=files, verify=False)
+    r = requests.post(url, files=files, verify=False, timeout=1000)
     return r.text
 
 
@@ -124,14 +124,17 @@ if __name__ == "__main__":
     parser.add_argument("--audio", default="output.wav", type=str, help="audio file")
     parser.add_argument("--id", default=1, type=int, help="id de la personne")
     parser.add_argument("--model", default="mistral", type=str, help="model")
+    parser.add_argument("--tts", default="", type=str, help="txt")
     args = parser.parse_args()
 
 
     #print(stt("https://localhost:8080", "output.wav"))
     #print(stt("https://localhost:8080", "output.wav", mode="/heavystt"))
-    #tts("https://localhost:8080", "bonjour, je me nomme gustave. et vous?", "/home/pi/piper/fr-gilles-low.onnx","fr")
+    #
     
-    if args.mode == "local":
+    if args.tts != "":
+        tts("https://localhost:8080", args.tts, "/home/pi/piper/fr-mls_1840-low.onnx","fr")
+    elif args.mode == "local":
         print(f"{Fore.GREEN}Sending local request...{Style.RESET_ALL}")
         res = local_mode(args.address+":"+args.port, args.audio, "/localrequest", args.id)
         print(res)
