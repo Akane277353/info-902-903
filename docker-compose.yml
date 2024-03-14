@@ -9,8 +9,6 @@ services:
       MYSQL_PASSWORD: root
     ports:
       - "3306:3306"
-    volumes:
-      - ./SQL:/var/lib/mysql
   assistant-backend:
     build:
       context: ./Backend
