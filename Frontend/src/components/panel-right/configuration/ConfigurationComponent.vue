@@ -17,7 +17,7 @@ function setConfiguration() {
 <template>
   <div class="configuration">
     <div class="header">
-      <h1>Historique</h1>
+      <h1>Configuration</h1>
       <v-icon
         class="icon"
         icon="mdi-page-first"
