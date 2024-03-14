@@ -6,6 +6,7 @@ from colorama import init as colorama_init
 from colorama import Fore
 from colorama import Style
 import shutil
+from tts import run_tts
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
@@ -35,21 +36,24 @@ def stt(address, audio, mode="/stt"): # mode heavystt
 
 
 def tts(address, text, speaker, lang, mode="/tts"): # mode heavytts
-    data = {
-        'text': text,
-        'speaker': speaker,
-        'lang': lang
-    }
-
-    json_data = json.dumps(data)
-    headers = {'Content-Type': 'application/json'}
-    r = requests.post(address+mode, data=json_data, headers=headers, verify=False)
-    if r.status_code == 200:
-        with open("a.wav", 'wb') as file:
-            file.write(r.content)
-        return True
+    if mode == "/tts":
+        run_tts(text, speaker, "a.wav")
     else:
-        return False
+        data = {
+            'text': text,
+            'speaker': speaker,
+            'lang': lang
+        }
+
+        json_data = json.dumps(data)
+        headers = {'Content-Type': 'application/json'}
+        r = requests.post(address+mode, data=json_data, headers=headers, verify=False)
+        if r.status_code == 200:
+            with open("a.wav", 'wb') as file:
+                file.write(r.content)
+        else:
+            return False
+    return True
     
 
 def ollama(model="mistral", text="hello"):
