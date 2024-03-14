@@ -42,3 +42,19 @@ AUDIO: audio path, default -> output.wav
 ID: user id, default -> 1
 
 MODEL: llm model used, default -> mistral
+
+## Frontend
+
+### Setup
+
+```bash
+npm install
+```
+
+### Run
+```bash
+npm run dev
+```
+
+### Deployment
+http://141.145.207.6
