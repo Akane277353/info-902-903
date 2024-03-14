@@ -44,9 +44,8 @@ def tts(address, text, speaker, lang, mode="/tts"): # mode heavytts
     json_data = json.dumps(data)
     headers = {'Content-Type': 'application/json'}
     r = requests.post(address+mode, data=json_data, headers=headers, verify=False)
-    print(r.status_code)
     if r.status_code == 200:
-        with open("/home/pi/Documents/info-902-903/RPI-Jon/a.wav", 'wb') as file:
+        with open("a.wav", 'wb') as file:
             file.write(r.content)
         return True
     else:
@@ -95,7 +94,6 @@ def heavy_mode(address, audio, mode, id, model):
         'code': id,
         'model': model
     }
-    
     files = {'audio_file': open(audio, 'rb'), 'data': json.dumps(data)}
     r = requests.post(url, files=files, verify=False, timeout=1000)
     if r.status_code == 200:
@@ -112,7 +110,6 @@ def heavy_mode_l_tts(address, audio, mode, id, model):
         'code': id,
         'model': model
     }
-
     files = {'audio_file': open(audio, 'rb'), 'data': json.dumps(data)}
     r = requests.post(url, files=files, verify=False, timeout=1000)
     return r.text
@@ -136,7 +133,7 @@ if __name__ == "__main__":
     #
     
     if args.tts != "":
-        print(tts("http://localhost:8080", args.tts, "/home/pi/piper/fr-mls_1840-low.onnx","fr"))
+        tts("https://localhost:8080", args.tts, "/home/pi/piper/fr-mls_1840-low.onnx","fr")
     elif args.mode == "local":
         print(f"{Fore.GREEN}Sending local request...{Style.RESET_ALL}")
         res = local_mode(args.address+":"+args.port, args.audio, "/localrequest", args.id)
@@ -146,7 +143,7 @@ if __name__ == "__main__":
         print(f"{Fore.GREEN}Sending distant request no tts...{Style.RESET_ALL}")
         res = heavy_mode_l_tts(args.address+":"+args.port, args.audio, "/distantnottsrequest", args.id, args.model)
         print(res)
-        print(tts("https://localhost:8080", res, "/home/pi/piper/fr-gilles-low.onnx","fr"))
+        tts("https://localhost:8080", res, "/home/pi/piper/fr-gilles-low.onnx","fr")
     elif args.mode == "htts":
         print(f"{Fore.GREEN}Sending distant request...{Style.RESET_ALL}")
         heavy_mode("https://localhost:8080", args.audio, "/distantrequest", args.id, args.model)

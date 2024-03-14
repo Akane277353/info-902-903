@@ -13,7 +13,7 @@ _mode = None
 _bdd = None
 
 
-
+tempPath = "/home/pi/Documents/info-902-903/rasperry/temp"
 
 ###############################################################
 ##################         UTILITY         ####################
@@ -23,9 +23,9 @@ _bdd = None
 
 
 def clean():
-    if os.path.exists("temp"):
-        shutil.rmtree("temp")
-    os.mkdir("temp")
+    if os.path.exists(tempPath):
+        shutil.rmtree(tempPath)
+    os.mkdir(tempPath)
 
 
 def ollama(model="tinyllama", text="hello"):
@@ -50,7 +50,7 @@ def ollama(model="tinyllama", text="hello"):
 
 def light_tts(text, speaker, lang):
     global _tts
-    name = "temp/"+ random_string(10) + ".wav"
+    name = tempPath+"/"+ random_string(10) + ".wav"
     run_tts(text, speaker, name)
     return name
 
@@ -70,7 +70,7 @@ def light_stt(request):
 
 def heavy_stt(request):
     global _heavy_stt
-    name = "temp/"+ random_string(10) + ".wav"
+    name = tempPath+"/"+ random_string(10) + ".wav"
     audio = request.files.get('audio_file')
     if audio:
         audio.save(name, overwrite=True)
@@ -82,7 +82,7 @@ def heavy_stt(request):
 
 def heavy_tts(text, speaker, lang):
     global _heavy_tts
-    name = "temp/"+ random_string(10) + ".wav"
+    name = tempPath+"/"+ random_string(10) + ".wav"
     run_heavy_tts(_heavy_tts, text, speaker, name, lang)
     return name
 
