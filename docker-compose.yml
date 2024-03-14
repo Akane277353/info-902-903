@@ -14,6 +14,7 @@ services:
       context: ./Backend
     ports:
       - "8080:8081"
+    restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/info902
       - SPRING_DATASOURCE_USERNAME=root
